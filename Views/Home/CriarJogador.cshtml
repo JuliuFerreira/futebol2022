@@ -1,0 +1,73 @@
+﻿@using futebol2022.ViewModel
+@model JogadorViewModel
+
+<form method="post" asp-controller="Home" asp-action="CriarJogador" enctype="multipart/form-data">
+    <div class="container" style="border: 1px solid gray;border-radius: 10px;width: 60%;">
+        <div class="row mt-3 mb-4">
+            <div class="col-sm-12 text-left">
+                <h4>Novo Jogador</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show ets-font-size-alert" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        @ViewBag.Error
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="mb-3">
+                    <label asp-for="NomeJogador"></label><br />
+                    <input type="text" asp-for="NomeJogador" class="form-control" />
+                    <span class="text-danger" asp-validation-for="NomeJogador"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="mb-3" style="margin-bottom: ">
+                    <label asp-for="Apelido"></label><br />
+                    <input type="text" asp-for="Apelido" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="mb-3">
+                    <label asp-for="DataNascimento"></label><br />
+                    <input asp-for="DataNascimento" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="mb-3">
+                    <label asp-for="FotoJogador"></label><br />
+                    <input type="file" asp-for="FotoJogador" class="form-control" />
+                    <hr />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

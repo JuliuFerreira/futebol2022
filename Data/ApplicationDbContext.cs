@@ -16,8 +16,6 @@ namespace futebol2022.Data
 
         public DbSet<Jogador> TB_Jogadores { get; set; }
 
-        //Herick passou aqui
-        //Patrik passou aqui
-        //Julio passou aqui
+        public DbSet<Storage> TB_Storage { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using futebol2022.Data;
 using futebol2022.Models;
+using futebol2022.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+
 
 namespace futebol2022.Controllers
 {
@@ -30,6 +32,7 @@ namespace futebol2022.Controllers
         }
 
         // GET: HomeController/CriarJogador
+        [HttpGet]
         public ActionResult CriarJogador()
         {
             return View();
@@ -38,12 +41,21 @@ namespace futebol2022.Controllers
         // POST: HomeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CriarJogador(Jogador model)
+        public ActionResult CriarJogador(JogadorViewModel model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Error = "Ocorreu um error ao salvar os dados do jogador.";
+                    return View(model);
+                }
+
+
+
+                return View();
             }
+
             catch
             {
                 return View();
