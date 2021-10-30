@@ -17,13 +17,7 @@ namespace futebol2022.ViewModel
 
         [DisplayName("Apelido")]
         public string Apelido { get; set; }
-
-        [DisplayName("Número de jogos")]
-        public int? NumeroDeJogos { get; set; }
-
-        [DisplayName("Número de gols")]
-        public int? NumeroDeGols { get; set; }
-
+       
         [DisplayName("Foto do jogador")]
         public IFormFile FotoJogador { get; set; }
 

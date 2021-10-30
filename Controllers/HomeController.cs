@@ -3,6 +3,8 @@ using futebol2022.Models;
 using futebol2022.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 using System.Linq;
 
 
@@ -17,12 +19,23 @@ namespace futebol2022.Controllers
         {
             this._context = context;
         }
-        
+
         public ActionResult Index()
         {
+            Mensagens();
+
             var listaJogador = _context.TB_Jogadores.ToList();
 
             return View(listaJogador);
+        }
+
+        private void Mensagens()
+        {
+            if (TempData.ContainsKey("ErrorMsg"))
+                ViewData["MsgError"] = TempData["ErrorMsg"].ToString();
+
+            if (TempData.ContainsKey("SuccessMsg"))
+                ViewData["MsgSuccess"] = TempData["SuccessMsg"].ToString();
         }
 
         // GET: HomeController/Details/5
@@ -43,6 +56,7 @@ namespace futebol2022.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CriarJogador(JogadorViewModel model)
         {
+            using var ts = _context.Database.BeginTransaction();
             try
             {
                 if (!ModelState.IsValid)
@@ -51,14 +65,64 @@ namespace futebol2022.Controllers
                     return View(model);
                 }
 
+                long tamanhoArquivos = model.FotoJogador.Length;
 
+                if (tamanhoArquivos > 50000000)
+                {
+                    ViewBag.Error = "O tamanho da imagem excede 50 mb";
+                    return View(model);
+                }
 
-                return View();
+                var caminhoArquivo = Path.GetTempFileName();
+
+                string pasta = @"C:\Temp";
+                string nomeArquivo = $"{model.FotoJogador.FileName}";
+                string caminhoDestinoArquivo = $@"{pasta}";
+                string caminhoDestinoArquivoOriginal = $@"{caminhoDestinoArquivo}\{nomeArquivo}";
+
+                using (var stream = new FileStream(caminhoDestinoArquivoOriginal, FileMode.Create))
+                {
+                    model.FotoJogador.CopyToAsync(stream);
+                }
+
+                var storege = new Storage()
+                {
+                    Arquivo = Util.ConvertArquivoToBytes.ToByteArray(model.FotoJogador),
+                    ContentType = model.FotoJogador.ContentType,
+                    Diretorio = caminhoDestinoArquivo,
+                    Extensao = Path.GetExtension(model.FotoJogador.FileName),
+                    NomeArquivo = nomeArquivo,
+                    Tamanho = model.FotoJogador.Length.ToString(),
+                    
+                };
+
+                _context.TB_Storage.Add(storege);
+                _context.SaveChanges();
+
+                var jogador = new Jogador()
+
+                {
+                    Apelido = model.Apelido,
+                    DataNascimento = model.DataNascimento,
+                    NomeJogador = model.NomeJogador,
+                    StorageId = storege.StorageId,
+                };
+
+                _context.TB_Jogadores.Add(jogador);
+                _context.SaveChanges();
+
+                ts.Commit();
+
+                TempData["SuccessMsg"] = "Jogador criado com sucesso!";
+
+                return RedirectToAction("Index");
             }
 
-            catch
+            catch (Exception e)
             {
-                return View();
+                ts.Rollback();
+                ViewBag.Error = "Ocorreu um erro ao criar o Jogador";
+                return View(model);
             }
         }
 

@@ -17,7 +17,7 @@ namespace futebol2022.Models
 
         public string NomeArquivo { get; set; }
 
-        public DateTime DataInsercao => DateTime.Now;
+        public DateTime DataInsercao { get; set; } = DateTime.Now;
 
         public string Extensao { get; set; }
 

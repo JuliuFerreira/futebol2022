@@ -13,6 +13,25 @@
         </div>
     </div>
 
+    @if (ViewData["MsgSuccess"] != null)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-success alert-dismissible fade show ets-font-size-alert" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    @ViewData["MsgSuccess"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+
 
     @if (Model.Count() > 0)
     {
@@ -32,12 +51,7 @@
                         <th>
                             Data nascimento
                         </th>
-                        <th>
-                            Núm. Jogos
-                        </th>
-                        <th>
-                            Gols marcados
-                        </th>
+                        
                         <th></th>
                     </tr>
                 </thead>
