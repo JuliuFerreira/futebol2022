@@ -15,5 +15,7 @@ namespace futebol2022.Data
         }
 
         public DbSet<Jogador> TB_Jogadores { get; set; }
+
+        //Herick passou aqui
     }
 }
