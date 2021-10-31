@@ -3,6 +3,7 @@ using futebol2022.Models;
 using futebol2022.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,9 @@ namespace futebol2022.Controllers
         {
             Mensagens();
 
-            var listaJogador = _context.TB_Jogadores.ToList();
+            var listaJogador = _context.TB_Jogadores
+                .Include(p => p.Storage)
+                .ToList();
 
             return View(listaJogador);
         }
@@ -59,13 +62,18 @@ namespace futebol2022.Controllers
             using var ts = _context.Database.BeginTransaction();
             try
             {
+                long tamanhoArquivos = 0;
+
                 if (!ModelState.IsValid)
                 {
                     ViewBag.Error = "Ocorreu um error ao salvar os dados do jogador.";
                     return View(model);
                 }
 
-                long tamanhoArquivos = model.FotoJogador.Length;
+                if(model.FotoJogador != null)
+                {
+                    tamanhoArquivos = model.FotoJogador.Length;
+                }                
 
                 if (tamanhoArquivos > 50000000)
                 {
@@ -73,31 +81,38 @@ namespace futebol2022.Controllers
                     return View(model);
                 }
 
-                var caminhoArquivo = Path.GetTempFileName();
+                var storage = new Storage();
 
-                string pasta = @"C:\Temp";
-                string nomeArquivo = $"{model.FotoJogador.FileName}";
-                string caminhoDestinoArquivo = $@"{pasta}";
-                string caminhoDestinoArquivoOriginal = $@"{caminhoDestinoArquivo}\{nomeArquivo}";
-
-                using (var stream = new FileStream(caminhoDestinoArquivoOriginal, FileMode.Create))
+                if(model.FotoJogador != null)
                 {
-                    model.FotoJogador.CopyToAsync(stream);
-                }
+                    var caminhoArquivo = Path.GetTempFileName();
 
-                var storege = new Storage()
-                {
-                    Arquivo = Util.ConvertArquivoToBytes.ToByteArray(model.FotoJogador),
-                    ContentType = model.FotoJogador.ContentType,
-                    Diretorio = caminhoDestinoArquivo,
-                    Extensao = Path.GetExtension(model.FotoJogador.FileName),
-                    NomeArquivo = nomeArquivo,
-                    Tamanho = model.FotoJogador.Length.ToString(),
+                    string pasta = @"C:\Temp\Futeba2022";
+                    string nomeArquivo = $"{model.FotoJogador.FileName}";
+                    string caminhoDestinoArquivo = $@"{pasta}";
+                    string caminhoDestinoArquivoOriginal = $@"{caminhoDestinoArquivo}\{nomeArquivo}";
+
+                    using (var stream = new FileStream(caminhoDestinoArquivoOriginal, FileMode.Create))
+                    {
+                        model.FotoJogador.CopyToAsync(stream);
+                    }
+
+                    storage.Arquivo = Util.ConvertArquivoToBytes.ToByteArray(model.FotoJogador);
+                    storage.ContentType = model.FotoJogador.ContentType;
+                    storage.Diretorio = caminhoDestinoArquivo;
+                    storage.Extensao = Path.GetExtension(model.FotoJogador.FileName);
+                    storage.NomeArquivo = nomeArquivo;
+                    storage.Tamanho = model.FotoJogador.Length.ToString();
                     
-                };
-
-                _context.TB_Storage.Add(storege);
-                _context.SaveChanges();
+                    _context.TB_Storage.Add(storage);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _context.TB_Storage.Add(storage);
+                    _context.SaveChanges();
+                }
+              
 
                 var jogador = new Jogador()
 
@@ -105,7 +120,7 @@ namespace futebol2022.Controllers
                     Apelido = model.Apelido,
                     DataNascimento = model.DataNascimento,
                     NomeJogador = model.NomeJogador,
-                    StorageId = storege.StorageId,
+                    StorageId = storage.StorageId,
                 };
 
                 _context.TB_Jogadores.Add(jogador);

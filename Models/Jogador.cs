@@ -26,6 +26,7 @@ namespace futebol2022.Models
 
         public virtual Storage Storage { get; set; }
 
+        [DisplayFormat(DataFormatString ="{0:g}", NullDisplayText = "---")]
         public DateTime? DataNascimento { get; set; }
 
     }
