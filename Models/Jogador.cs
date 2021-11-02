@@ -14,20 +14,27 @@ namespace futebol2022.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        [DisplayName("Id")]
         public int Id {get; set;}
 
         [DisplayName("Nome do jogador")]
         public string NomeJogador { get; set; }
 
+        [DisplayName("Apelido")]
         public string Apelido { get; set; }
 
         [ForeignKey("Storage")]
         public int StorageId { get; set; }
 
-        public virtual Storage Storage { get; set; }
+        public virtual Storage Storage { get; set; }        
 
         [DisplayFormat(DataFormatString ="{0:g}", NullDisplayText = "---")]
+
+        [DisplayName("Data de Nascimento")]
         public DateTime? DataNascimento { get; set; }
+
+        //julio passou aqui!
 
     }
 }
