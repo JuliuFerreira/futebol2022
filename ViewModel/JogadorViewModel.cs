@@ -20,8 +20,7 @@ namespace futebol2022.ViewModel
        
         [DisplayName("Foto do jogador")]
         public IFormFile FotoJogador { get; set; }
-
-        [DisplayName("Data nascimento")]
+       
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:g}")]
         [DataType(DataType.Date)]
         public DateTime? DataNascimento { get; set; }

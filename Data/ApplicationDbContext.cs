@@ -17,5 +17,11 @@ namespace futebol2022.Data
         public DbSet<Jogador> TB_Jogadores { get; set; }
 
         public DbSet<Storage> TB_Storage { get; set; }
+
+        public DbSet<Partidas> TB_Partidas { get; set; }
+        public DbSet <JogadorStorage> TB_JogadorStorage { get; set; }
+
+
     }
+
 }

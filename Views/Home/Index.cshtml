@@ -9,7 +9,7 @@
 
     <div class="row mb-4">
         <div class="col-sm-12">
-            <a asp-controller="Home" asp-action="CriarJogador" class="btn btn-primary"><i class="fas fa-plus"></i> Novo jogador</a>
+            <a asp-controller="Jogador" asp-action="CriarJogador" class="btn btn-primary"><i class="fas fa-plus"></i> Novo jogador</a>
         </div>
     </div>
 
@@ -83,8 +83,9 @@
                                 @(jogador.DataNascimento.HasValue ? jogador.DataNascimento.Value.ToShortDateString() : "---")
                             </td>
                             <td>
-                                <a asp-controller="Home" asp-action="EditarJogador" asp-route-id="@jogador.Id" class="btn btn-info"><i class="fas fa-edit"></i> Editar</a>
-                                <a asp-controller="Home" asp-action="DeletarJogador" asp-route-id="@jogador.Id" class="btn btn-danger"><i class="fas fa-times"></i> Deletar</a>
+                                <a asp-controller="Jogador" asp-action="DetalhesJogador" asp-route-id="@jogador.Id" class="btn btn-info"><i class="fas fa-eye"></i> Detalhes</a>
+                                <a asp-controller="Jogador" asp-action="EditarJogador" asp-route-id="@jogador.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                <a asp-controller="Jogador" asp-action="DeletarJogador" asp-route-id="@jogador.Id" class="btn btn-danger"><i class="fas fa-times"></i> Deletar</a>
                             </td>
                         </tr>
                     }

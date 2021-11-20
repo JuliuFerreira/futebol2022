@@ -14,7 +14,6 @@ namespace futebol2022.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         [DisplayName("Id")]
         public int Id {get; set;}
 
@@ -24,7 +23,14 @@ namespace futebol2022.Models
         [DisplayName("Apelido")]
         public string Apelido { get; set; }
 
-        [ForeignKey("Storage")]
+        [DisplayName("jogos")]
+        public int Jogos { get; set; }
+
+        [DisplayName("Gols")]
+        public int Gols { get; set; }
+
+
+
         public int StorageId { get; set; }
 
         public virtual Storage Storage { get; set; }        
@@ -33,8 +39,6 @@ namespace futebol2022.Models
 
         [DisplayName("Data de Nascimento")]
         public DateTime? DataNascimento { get; set; }
-
-        //julio passou aqui!
 
     }
 }
