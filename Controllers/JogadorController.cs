@@ -35,6 +35,7 @@ namespace futebol2022.Controllers
         {
             return View();
         }
+
         // POST: HomeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -134,6 +135,7 @@ namespace futebol2022.Controllers
                 return View(model);
             }
         }
+
         //GET: HomeController/Edit/5
         public ActionResult EditarJogador(int id)
         {
@@ -166,20 +168,35 @@ namespace futebol2022.Controllers
         // GET: HomeController/Delete/5
         public ActionResult DeletarJogador(int id)
         {
-            return View();
+            var jogador = _context.TB_Jogadores.Find(id);
+
+            return View(jogador);
         }
+
         // POST: HomeController/Delete/5
         [HttpPost]
+        [ActionName("DeletarJogador")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletarJogador(int id, Jogador model)
+        public ActionResult Deletar(int id)
         {
+            var jogador = _context.TB_Jogadores.Find(id); //Busco o jogador pelo ID na tabela TB_Jogadores
+            var jogadorStorage = _context.TB_JogadorStorage.FirstOrDefault(p => p.JogadorId == id); // Busco o ID na tabela TB_JogadorStorage passando como parametro o id do Jogador
+            var storage = _context.TB_Storage.FirstOrDefault(p => p.StorageId == jogadorStorage.StorageId); // Busco o ID da imagem no tabela TB_Storage
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Remove(jogador); //Removo o jogador com base no id informado
+                _context.Remove(jogadorStorage); // Removo o Id da tabela TB_JogadorStorage
+                _context.Remove(storage); // Removo o Id do Storage do jogador
+                _context.SaveChanges(); // Salvo as mudaças no banco de dados de cada tabela ao mesmo tempo
+
+                TempData["SuccessMsg"] = $"Jogador excluído com sucesso!";
+
+                return RedirectToAction("Index", "Home");
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                TempData["ErrorMsg"] = $"Não foi possível excluir o jogador {jogador.NomeJogador}";
+                return View(jogador);
             }
         }
 

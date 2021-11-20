@@ -25,8 +25,9 @@ namespace futebol2022.Controllers
         {
             Mensagens();
 
-            var listaJogador = _context.TB_Jogadores
-                .Include(p => p.Storage)
+            var listaJogador = _context.TB_JogadorStorage
+                .Include(p => p.Jogador)
+                .Include(p => p.Storage)                
                 .ToList();
 
             return View(listaJogador);

@@ -23,22 +23,14 @@ namespace futebol2022.Models
         [DisplayName("Apelido")]
         public string Apelido { get; set; }
 
+        [DisplayFormat(DataFormatString ="{0:g}", NullDisplayText = "---")]
+        [DisplayName("Data de Nascimento")]
+        public DateTime? DataNascimento { get; set; }
+
         [DisplayName("jogos")]
         public int Jogos { get; set; }
 
         [DisplayName("Gols")]
         public int Gols { get; set; }
-
-
-
-        public int StorageId { get; set; }
-
-        public virtual Storage Storage { get; set; }        
-
-        [DisplayFormat(DataFormatString ="{0:g}", NullDisplayText = "---")]
-
-        [DisplayName("Data de Nascimento")]
-        public DateTime? DataNascimento { get; set; }
-
     }
 }

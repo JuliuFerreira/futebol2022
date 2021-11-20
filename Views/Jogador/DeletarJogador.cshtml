@@ -1,12 +1,17 @@
 ﻿@using futebol2022.Models
 @model Jogador
 
-<form method="post" asp-controller="Jogador" asp-action="EditarJogador" enctype="multipart/form-data">
-    <input type="hidden" asp-for="@Model.Id"/>
+<form method="post" asp-controller="Jogador" asp-action="DeletarJogador" enctype="multipart/form-data">
     <div class="container" style="border: 1px solid gray;border-radius: 10px;width: 60%;">
         <div class="row mt-3 mb-4">
             <div class="col-sm-12 text-left">
-                <h4>Editar Jogador</h4>
+                <h4>Deletar Jogador</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h5 class="text-danger">Deseja realmente deletar este jogador?</h5>
             </div>
         </div>
 
@@ -30,7 +35,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label asp-for="NomeJogador"></label><br />
-                    <input type="text" asp-for="NomeJogador" class="form-control" />
+                    <input type="text" asp-for="NomeJogador" class="form-control" readonly />
                     <span class="text-danger" asp-validation-for="NomeJogador"></span>
                 </div>
             </div>
@@ -40,38 +45,38 @@
             <div class="col-sm-3">
                 <div class="form-group" style="margin-bottom:">
                     <label asp-for="Apelido"></label><br />
-                    <input type="text" asp-for="Apelido" class="form-control" />
+                    <input type="text" asp-for="Apelido" class="form-control" readonly />
                 </div>
             </div>
+
             <div class="col-sm-3">
                 <div class="form-group">
                     <label asp-for="DataNascimento"></label><br />
-                    <input asp-for="DataNascimento" class="form-control" />
+                    <input asp-for="DataNascimento" class="form-control" readonly />
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
                     <label asp-for="Jogos"></label><br />
-                    <input asp-for="Jogos" class="form-control" />
+                    <input asp-for="Jogos" class="form-control" readonly />
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
                     <label asp-for="Gols"></label><br />
-                    <input asp-for="Gols" class="form-control" />
+                    <input asp-for="Gols" class="form-control" readonly />
                 </div>
             </div>
         </div>
 
-        
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="submit" asp-route-id="@Model.Id" class="btn btn-danger"><i class="fas fa-trash"></i> Deletar</button>
                     <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Voltar</a>
                 </div>
             </div>
         </div>
     </div>
+
 </form>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Jogador>
+﻿@model IEnumerable<JogadorStorage>
 
 <div class="container-fluid">
     <div class="row">
@@ -56,36 +56,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var jogador in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <td style="width: 8% !important;">
-                                @if (string.IsNullOrEmpty(jogador.Storage.Tamanho))
+                                @if (string.IsNullOrEmpty(item.Storage.Tamanho))
                                 {
                                     <img src="~/image/NoImage.jpg" style="width: 100%;" />
                                 }
                                 else
                                 {
-                                     var imagem = Convert.ToBase64String(jogador.Storage.Arquivo);
-                                     var contentType = jogador.Storage.ContentType;
+                                     var imagem = Convert.ToBase64String(item.Storage.Arquivo);
+                                     var contentType = item.Storage.ContentType;
                                     
 
-                                    <img src="@String.Format("data:{0}; base64,{1}", contentType, imagem)" alt="@jogador.Storage.NomeArquivo" style="width: 100%;"/>
+                                    <img src="@String.Format("data:{0}; base64,{1}", contentType, imagem)" alt="@item.Storage.NomeArquivo" style="width: 100%;"/>
                                 }
                             </td>
                             <td>
-                                @jogador.NomeJogador
+                                @item.Jogador.NomeJogador
                             </td>
                             <td>
-                                @jogador.Apelido
+                                @item.Jogador.Apelido
                             </td>
                             <td>
-                                @(jogador.DataNascimento.HasValue ? jogador.DataNascimento.Value.ToShortDateString() : "---")
+                                @(item.Jogador.DataNascimento.HasValue ? item.Jogador.DataNascimento.Value.ToShortDateString() : "---")
                             </td>
                             <td>
-                                <a asp-controller="Jogador" asp-action="DetalhesJogador" asp-route-id="@jogador.Id" class="btn btn-info"><i class="fas fa-eye"></i> Detalhes</a>
-                                <a asp-controller="Jogador" asp-action="EditarJogador" asp-route-id="@jogador.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                <a asp-controller="Jogador" asp-action="DeletarJogador" asp-route-id="@jogador.Id" class="btn btn-danger"><i class="fas fa-times"></i> Deletar</a>
+                                <a asp-controller="Jogador" asp-action="DetalhesJogador" asp-route-id="@item.Jogador.Id" class="btn btn-info"><i class="fas fa-eye"></i> Detalhes</a>
+                                <a asp-controller="Jogador" asp-action="EditarJogador" asp-route-id="@item.Jogador.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                <a asp-controller="Jogador" asp-action="DeletarJogador" asp-route-id="@item.Jogador.Id" class="btn btn-danger"><i class="fas fa-trash"></i> Deletar</a>
                             </td>
                         </tr>
                     }
